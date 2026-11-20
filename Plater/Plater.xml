@@ -1,11 +1,12 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/..\..\FrameXML\UI.xsd">
 	<Script file="Plater_Script_Include.lua" />
 
-	<Frame name="PlaterNamePlateFullBorderTemplate" mixin="PlaterNamePlateBorderTemplateMixin" ignoreParentScale="true" setAllPoints="true" useParentLevel="true" virtual="true">
+	<!-- Temucraft: 3.3.5 XML has no mixin, parentArray, ignoreParentScale or useParentLevel: OnLoad does the mixin and the Textures list -->
+	<Frame name="PlaterNamePlateFullBorderTemplate" setAllPoints="true" virtual="true">
 		<Layers>
-			<Layer level="BACKGROUND" textureSubLevel="-8">
+			<Layer level="BACKGROUND">
 				<!-- Left -->
-				<Texture parentKey="Left" parentArray="Textures">
+				<Texture parentKey="Left">
 					<Size x="1.0" />
 					<Anchors>
 						<Anchor point="TOPRIGHT" relativePoint="TOPLEFT" x="0" y="1.0" />
@@ -15,7 +16,7 @@
 				</Texture>
 
 				<!-- Right -->
-				<Texture parentKey="Right" parentArray="Textures">
+				<Texture parentKey="Right">
 					<Size x="1.0" />
 					<Anchors>
 						<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="0" y="1.0" />
@@ -25,7 +26,7 @@
 				</Texture>
 
 				<!-- Bottom -->
-				<Texture parentKey="Bottom" parentArray="Textures">
+				<Texture parentKey="Bottom">
 					<Size y="1.0" />
 					<Anchors>
 						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" />
@@ -35,7 +36,7 @@
 				</Texture>
 
 				<!-- Top -->
-				<Texture parentKey="Top" parentArray="Textures">
+				<Texture parentKey="Top">
 					<Size y="1.0" />
 					<Anchors>
 						<Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" />
@@ -45,5 +46,12 @@
 				</Texture>
 			</Layer>
 		</Layers>
+		<Scripts>
+			<OnLoad>
+				Mixin(self, PlaterNamePlateBorderTemplateMixin)
+				self.Textures = { self.Left, self.Right, self.Bottom, self.Top }
+				if self:GetParent() then self:SetFrameLevel(self:GetParent():GetFrameLevel()) end
+			</OnLoad>
+		</Scripts>
 	</Frame>
 </Ui>

@@ -1,4 +1,4 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("PlaterNameplates", "zhCN") 
-if not L then return end 
+if not L then return end
 
-@localization(locale="zhCN", format="lua_additive_table")@
+-- Temucraft: no translations in the source; the English strings are used.
