@@ -28,6 +28,8 @@ local IS_WOW_PROJECT_NOT_MAINLINE = WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE
 
 local UnitPlayerControlled = UnitPlayerControlled
 local UnitIsTapDenied = UnitIsTapDenied
+--Temucraft: GetBuildInfo with the interface version as fourth value (3.3.5 gives three values)
+local GetBuildInfo = TemucraftCompat and TemucraftCompat.Modern and TemucraftCompat.Modern.GetBuildInfo or GetBuildInfo
 
 SMALL_NUMBER = 0.000001
 ALPHA_BLEND_AMOUNT = 0.8400251
@@ -982,7 +984,8 @@ function DF:GetSpellBookSpells()
     for i = 1, GetNumSpellTabs() do
         local tabName, tabTexture, offset, numSpells, isGuild, offspecId = GetSpellTabInfo(i)
 
-        if (offspecId == 0 and tabTexture ~= 136830) then --don't add spells found in the General tab
+        --Temucraft: 3.3.5 gives no offspecId and a texture path: skip the General tab (the first one) by its index
+        if ((offspecId or 0) == 0 and tabTexture ~= 136830 and i > 1) then --don't add spells found in the General tab
             offset = offset + 1
             local tabEnd = offset + numSpells
 
@@ -2449,7 +2452,7 @@ end
 		
 		--
 		TutorialAlertFrame.label = type (maintext) == "string" and maintext or type (desctext) == "string" and desctext or ""
-		MicroButtonAlert_SetText (TutorialAlertFrame, alert.label)
+		MicroButtonAlert_SetText (TutorialAlertFrame, TutorialAlertFrame.label) --Temucraft: was alert.label (an undefined global)
 		--
 		
 		TutorialAlertFrame.clickfunc = clickfunc

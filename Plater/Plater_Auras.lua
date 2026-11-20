@@ -8,7 +8,8 @@ local IS_WOW_PROJECT_NOT_MAINLINE = WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE
 local IS_WOW_PROJECT_CLASSIC_ERA = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 
 --preparation for 10.0
-local IS_NEW_UNIT_AURA_AVAILABLE = C_UnitAuras and C_UnitAuras.GetAuraDataBySlot and true
+--Temucraft: 3.3.5 has no aura slots (the compat C_UnitAuras.GetAuraDataBySlot only works with UnitAuraSlots), use the UnitAura path
+local IS_NEW_UNIT_AURA_AVAILABLE = false --C_UnitAuras and C_UnitAuras.GetAuraDataBySlot and true
 
 --stop yellow lines on my editor
 local tinsert = _G.tinsert
@@ -29,7 +30,7 @@ local GetSpellInfo = _G.GetSpellInfo
 local floor = _G.floor
 local UnitAuraSlots = _G.UnitAuraSlots
 local UnitAuraBySlot = _G.UnitAuraBySlot
-local UnitAura = _G.UnitAura
+local UnitAura = PlaterTemucraft.Modern.UnitAura or _G.UnitAura --Temucraft: UnitAura with the newer return values
 local GetAuraDataBySlot = _G.C_UnitAuras and _G.C_UnitAuras.GetAuraDataBySlot
 local BackdropTemplateMixin = _G.BackdropTemplateMixin
 local BUFF_MAX_DISPLAY = _G.BUFF_MAX_DISPLAY
@@ -322,6 +323,8 @@ local UnitAuraEventHandler = function (_, event, arg1, arg2, arg3, ...)
 end
 UnitAuraEventHandlerFrame:SetScript ("OnEvent", UnitAuraEventHandler)
 UnitAuraEventHandlerFrame:RegisterEvent ("UNIT_AURA")
+--Temucraft: get UNIT_AURA for the plate tokens too (sent by !TemucraftCompat for plates that show target, focus or mouseover)
+PlaterTemucraft.WantPlateEvents (UnitAuraEventHandlerFrame)
 
 function Plater.RemoveFromAuraUpdate (unit)
 	if not unit then return end
@@ -518,7 +521,8 @@ end
                 setFunction(PlaterNamePlateAuraTooltip, iconFrame:GetParent().unit, iconFrame:GetID(), iconFrame.filter)
             end 
         else
-            PlaterNamePlateAuraTooltip:SetUnitAura (iconFrame:GetParent().unit, iconFrame:GetID(), iconFrame.filter)
+            --Temucraft: the client only knows the plate's real unit (target, focus, mouseover)
+            PlaterNamePlateAuraTooltip:SetUnitAura (PlaterTemucraft.RealUnit (iconFrame:GetParent().unit), iconFrame:GetID(), iconFrame.filter)
         end
 		PlaterNamePlateAuraTooltip:ApplyOwnBackdrop()
 		iconFrame.UpdateTooltip = Plater.OnEnterAura
@@ -526,7 +530,7 @@ end
 
 	function Plater.OnLeaveAura (iconFrame) --private
 		PlaterNamePlateAuraTooltip:Hide()
-		if NamePlateTooltip:IsForbidden() then return end
+		if not NamePlateTooltip or NamePlateTooltip:IsForbidden() then return end --Temucraft: no NamePlateTooltip on 3.3.5
 		NamePlateTooltip:Hide() -- backwards compatibility for mods (should be removed later)
 	end
 	

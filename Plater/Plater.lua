@@ -103,11 +103,11 @@ local Plater = DF:CreateAddOn ("Plater", "PlaterDB", PLATER_DEFAULT_SETTINGS, In
 })
 
 Plater.versionString = GetAddOnMetadata("Plater_dev", "Version") or GetAddOnMetadata("Plater", "Version")
-Plater.fullVersionInfo = Plater.versionString .. " - DF v" .. select(2,LibStub:GetLibrary("DetailsFramework-1.0")) .. " - " .. GetBuildInfo()
+Plater.fullVersionInfo = Plater.versionString .. " - DF v" .. select(2,LibStub:GetLibrary("DetailsFramework-1.0")) .. " - " .. PlaterTemucraft.Modern.GetBuildInfo()
 function Plater.GetVersionInfo(printOut)
 	-- update, just in case...
 	Plater.versionString = GetAddOnMetadata("Plater_dev", "Version") or GetAddOnMetadata("Plater", "Version")
-	Plater.fullVersionInfo = Plater.versionString .. " - DF v" .. select(2,LibStub:GetLibrary("DetailsFramework-1.0")) .. " - " .. GetBuildInfo()
+	Plater.fullVersionInfo = Plater.versionString .. " - DF v" .. select(2,LibStub:GetLibrary("DetailsFramework-1.0")) .. " - " .. PlaterTemucraft.Modern.GetBuildInfo()
 	if printOut then print("Plater version info:\n" .. Plater.fullVersionInfo) end
 	return Plater.fullVersionInfo
 end
@@ -1619,14 +1619,14 @@ local class_specs_coords = {
 	--parameter "hasTankAura" is used to force aura scan skip for paladins -> UpdatePlayerTankState -> SPELL_AURA_APPLIED/REMOVED (CLASSIC)
 	local function IsPlayerEffectivelyTank(hasTankAura)
 		if IS_WOW_PROJECT_MAINLINE then
-			local assignedRole = UnitGroupRolesAssigned ("player")
+			local assignedRole = PlaterTemucraft.Modern.UnitGroupRolesAssigned ("player")
 			if (assignedRole == "NONE") then
 				local spec = GetSpecialization()
 				return spec and GetSpecializationRole (spec) == "TANK"
 			end
 			return assignedRole == "TANK"
 		elseif IS_WOW_PROJECT_CLASSIC_WRATH then
-			local assignedRole = UnitGroupRolesAssigned ("player")
+			local assignedRole = PlaterTemucraft.Modern.UnitGroupRolesAssigned ("player")
 			if assignedRole == "NONE" and UnitLevel ("player") >= 10 then
 				assignedRole = GetTalentGroupRole(GetActiveTalentGroup())
 			end
@@ -1649,7 +1649,7 @@ local class_specs_coords = {
 					playerIsTank = GetShapeshiftForm() == 1 -- Bear Form
 				elseif playerClass == "PALADIN" then
 					for i=1,40 do
-					  local spellId = select(10, UnitBuff("player",i))
+					  local spellId = select(10, PlaterTemucraft.Modern.UnitBuff("player",i))
 					  if spellId == 25780 then
 						playerIsTank = true
 					  end
@@ -1669,12 +1669,12 @@ local class_specs_coords = {
 	--return true if the unit is in tank role
 	local function IsUnitEffectivelyTank (unit)
 		if IS_WOW_PROJECT_MAINLINE then
-			return UnitGroupRolesAssigned (unit) == "TANK"
+			return PlaterTemucraft.Modern.UnitGroupRolesAssigned (unit) == "TANK"
 		elseif IS_WOW_PROJECT_CLASSIC_WRATH then
 			if IsInRaid() then
 				return GetPartyAssignment("MAINTANK", unit)
 			else
-				return UnitGroupRolesAssigned (unit) == "TANK"
+				return PlaterTemucraft.Modern.UnitGroupRolesAssigned (unit) == "TANK"
 			end
 		else
 			return GetPartyAssignment("MAINTANK", unit)
@@ -1988,7 +1988,7 @@ local class_specs_coords = {
 		if not cvar then -- store all
 			for CVarName, enabled in pairs (cvars_to_store) do
 				if enabled then
-					cvarTable [CVarName] = get_cvar_value(GetCVar (CVarName))
+					cvarTable [CVarName] = get_cvar_value(PlaterTemucraft.GetCVar (CVarName))
 				end
 			end
 		elseif cvars_to_store [cvar] then
@@ -2017,7 +2017,7 @@ local class_specs_coords = {
 		if (savedCVars) then
 			for CVarName, CVarValue in pairs (savedCVars) do
 				if cvars_to_store [CVarName] then --only restore what we want to store/restore!
-					SetCVar (CVarName, get_cvar_value(CVarValue))
+					PlaterTemucraft.SetCVar (CVarName, get_cvar_value(CVarValue))
 				end
 			end
 		end
@@ -2028,7 +2028,7 @@ local class_specs_coords = {
 		cvar = cvar and cvar:gsub(" ", "") or nil
 		if cvar and cvar ~= "" then
 			if cvars_to_store[cvar] then
-				print("CVar info:\nName: '" .. cvar .. "'\nCurrent Value: " .. (get_cvar_value(GetCVar (cvar)) or "<not set>") .. "\nStored Value: " .. (Plater.db.profile.saved_cvars[cvar] or "<not stored>") ..  "\nLast changed by: " .. (Plater.db.profile.saved_cvars_last_change[cvar] and ("\n" .. Plater.db.profile.saved_cvars_last_change[cvar]) or "<no info>"))
+				print("CVar info:\nName: '" .. cvar .. "'\nCurrent Value: " .. (get_cvar_value(PlaterTemucraft.GetCVar (cvar)) or "<not set>") .. "\nStored Value: " .. (Plater.db.profile.saved_cvars[cvar] or "<not stored>") ..  "\nLast changed by: " .. (Plater.db.profile.saved_cvars_last_change[cvar] and ("\n" .. Plater.db.profile.saved_cvars_last_change[cvar]) or "<no info>"))
 			else
 				print("CVar '" .. cvar .. "' is not stored in Plater.")
 			end
@@ -2087,7 +2087,9 @@ local class_specs_coords = {
 		
 		DB_NPCIDS_CACHE = Plater.db.profile.npc_cache
 		
-		DB_USE_UIPARENT = profile.use_ui_parent
+		--Temucraft: always parent to UIParent; as a child of the 3.3.5 plate the unit frame would take the plate's
+		--alpha, which the client lowers on every plate but the target
+		DB_USE_UIPARENT = true --profile.use_ui_parent
 		
 		DB_BORDER_COLOR_R = profile.border_color [1]
 		DB_BORDER_COLOR_G = profile.border_color [2]
@@ -2874,17 +2876,17 @@ local class_specs_coords = {
 			Plater.ZoneInstanceType = instanceType
 			
 			--> ensure resource on target consistency after login:
-			local resourcesOnTarget = GetCVar ("nameplateResourceOnTarget") == CVAR_ENABLED
+			local resourcesOnTarget = PlaterTemucraft.GetCVar ("nameplateResourceOnTarget") == CVAR_ENABLED
 			if resourcesOnTarget then
 				PlaterDBChr.resources_on_target = true
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateResourceOnTarget", CVAR_DISABLED) -- reset this to false always, as it conflicts
+					PlaterTemucraft.SetCVar ("nameplateResourceOnTarget", CVAR_DISABLED) -- reset this to false always, as it conflicts
 				end
 			end
 			
 			-- this seems to be gone as of 18.12.2020
 			--if Plater.db.profile.plate_config.friendlynpc.quest_enabled and not InCombatLockdown() then
-				--SetCVar("showQuestTrackingTooltips", 1) -- ensure it is turned on...
+				--PlaterTemucraft.SetCVar("showQuestTrackingTooltips", 1) -- ensure it is turned on...
 			--end
 
 			--create the frame to hold the plater resoruce bar
@@ -3029,6 +3031,12 @@ local class_specs_coords = {
 		--~created ~events ~oncreated 
 		NAME_PLATE_CREATED = function (event, plateFrame)
 			--ViragDevTool_AddData({ctime = GetTime(), unit = plateFrame [MEMBER_UNITID] or "nil", stack = debugstack()}, "NAME_PLATE_CREATED - " .. (plateFrame [MEMBER_UNITID] or "nil"))
+			--Temucraft: the 3.3.5 plate has no name and no retail UnitFrame: a stand-in hides and shows the plate's own parts
+			--(no new file level locals in this file: it is at the 200 locals limit of Lua 5.1)
+			if (not plateFrame.UnitFrame or plateFrame.UnitFrame == plateFrame) then
+				plateFrame.UnitFrame = PlaterTemucraft.CreateBlizzardProxy(plateFrame)
+			end
+			local plateFrameName = PlaterTemucraft.PlateName(plateFrame)
 			--> create the unitframe
 				local unitFrameOptions = {
 					ShowPowerBar = false, 
@@ -3062,7 +3070,7 @@ local class_specs_coords = {
 				if (DB_USE_UIPARENT) then
 					--TODO: why is it not showing properly when V / V hide / show but when leaving / entering scren??? -> plateFrame for now...
 					--when using UIParent as the unit frame parent, adjust the unitFrame scale to be equal to blizzard plateFrame
-					newUnitFrame = DF:CreateUnitFrame (UIParent, plateFrame:GetName() .. "PlaterUnitFrame", unitFrameOptions, healthBarOptions, castBarOptions, powerBarOptions)
+					newUnitFrame = DF:CreateUnitFrame (UIParent, plateFrameName .. "PlaterUnitFrame", unitFrameOptions, healthBarOptions, castBarOptions, powerBarOptions)
 					newUnitFrame:SetAllPoints()
 					newUnitFrame:SetFrameStrata ("BACKGROUND")
 
@@ -3080,7 +3088,7 @@ local class_specs_coords = {
 					
 					newUnitFrame.IsUIParent = true --expose to scripts the unitFrame is a UIParent child
 				else
-					newUnitFrame = DF:CreateUnitFrame (plateFrame, plateFrame:GetName() .. "PlaterUnitFrame", unitFrameOptions, healthBarOptions, castBarOptions, powerBarOptions)
+					newUnitFrame = DF:CreateUnitFrame (plateFrame, plateFrameName .. "PlaterUnitFrame", unitFrameOptions, healthBarOptions, castBarOptions, powerBarOptions)
 				end
 
 				plateFrame.unitFrame = newUnitFrame
@@ -3430,7 +3438,7 @@ local class_specs_coords = {
 				Plater.CreateBossModAuraFrame(plateFrame.unitFrame)
 			
 			--> 3D model frame
-				plateFrame.Top3DFrame = CreateFrame ("playermodel", plateFrame:GetName() .. "3DFrame", plateFrame, "ModelWithControlsTemplate")
+				plateFrame.Top3DFrame = CreateFrame ("playermodel", plateFrameName .. "3DFrame", plateFrame, "ModelWithControlsTemplate")
 				plateFrame.Top3DFrame:SetPoint ("bottom", plateFrame, "top", 0, -100)
 				plateFrame.Top3DFrame:SetSize (200, 250)
 				plateFrame.Top3DFrame:EnableMouse (false)
@@ -3713,6 +3721,8 @@ local class_specs_coords = {
 			else
 				ENABLED_BLIZZARD_PLATEFRAMES[blizzardPlateFrameID] = true
 				plateFrame.unitFrame:Hide()
+				--Temucraft: show the 3.3.5 plate again when Plater doesn't draw this kind of unit
+				plateFrame.UnitFrame:Show()
 				return
 			end
 			
@@ -4420,11 +4430,11 @@ function Plater.OnInit() --private --~oninit ~init
 			if (InCombatLockdown()) then
 				return C_Timer.After (1, function() Plater.ForceCVars() end)
 			end
-			SetCVar ("nameplateMinAlpha", 0.90135484)
-			SetCVar ("nameplateMinAlphaDistance", -10^5.2)
-			SetCVar ("nameplateSelectedAlpha", 1)
-			SetCVar ("nameplateNotSelectedAlpha", 1)
-			SetCVar ("nameplateRemovalAnimation", DB_USE_QUICK_HIDE and 0 or 1)
+			PlaterTemucraft.SetCVar ("nameplateMinAlpha", 0.90135484)
+			PlaterTemucraft.SetCVar ("nameplateMinAlphaDistance", -10^5.2)
+			PlaterTemucraft.SetCVar ("nameplateSelectedAlpha", 1)
+			PlaterTemucraft.SetCVar ("nameplateNotSelectedAlpha", 1)
+			PlaterTemucraft.SetCVar ("nameplateRemovalAnimation", DB_USE_QUICK_HIDE and 0 or 1)
 		end
 	
 	--schedule data update
@@ -4482,6 +4492,20 @@ function Plater.OnInit() --private --~oninit ~init
 		Plater.EventHandlerFrame:RegisterEvent ("NAME_PLATE_CREATED")
 		Plater.EventHandlerFrame:RegisterEvent ("NAME_PLATE_UNIT_ADDED")
 		Plater.EventHandlerFrame:RegisterEvent ("NAME_PLATE_UNIT_REMOVED")
+		
+		--Temucraft: a 3.3.5 plate only knows its unit while it is the target, focus or mouseover. When that changes
+		--(the client shows the new target's plate a moment after PLAYER_TARGET_CHANGED), update the target marks,
+		--and set the plate up again the first time its GUID is known (npc colors, scripts by npc id)
+		PlaterTemucraft.HookBinds (function (plateFrame, unitID)
+			if (not plateFrame.unitFrame or not plateFrame.unitFrame.PlaterOnScreen) then
+				return
+			end
+			local guid = UnitGUID (unitID)
+			if (guid and plateFrame [MEMBER_GUID] ~= guid) then
+				Plater.EventHandler (nil, "NAME_PLATE_UNIT_ADDED", unitID)
+			end
+			Plater.OnPlayerTargetChanged()
+		end)
 		
 		Plater.EventHandlerFrame:RegisterEvent ("PLAYER_TARGET_CHANGED")
 		Plater.EventHandlerFrame:RegisterEvent ("PLAYER_FOCUS_CHANGED")
@@ -4592,7 +4616,7 @@ function Plater.OnInit() --private --~oninit ~init
 		--self if the nameplate driver frame: _G.NamePlateDriverFrame
 		--at the moment self isn't being used ~personal
 		function Plater.UpdatePersonalBar (self)
-			local showSelf = GetCVarBool ("nameplateShowSelf") and Plater.db.profile.plate_config.player.module_enabled
+			local showSelf = PlaterTemucraft.GetCVarBool ("nameplateShowSelf") and Plater.db.profile.plate_config.player.module_enabled
 			if (not showSelf) then
 				if PlaterDBChr.resources_on_target then
 					Plater.UpdateResourceFrame()
@@ -4683,7 +4707,7 @@ function Plater.OnInit() --private --~oninit ~init
 			--it is used when checking if the unit has auras to move the resources up to make room for the auras
 			Plater.CurrentTargetResourceFrame = nil
 		
-			local showSelf = GetCVarBool ("nameplateShowSelf") and Plater.db.profile.plate_config.player.module_enabled
+			local showSelf = PlaterTemucraft.GetCVarBool ("nameplateShowSelf") and Plater.db.profile.plate_config.player.module_enabled
 			local onCurrentTarget = PlaterDBChr.resources_on_target
 			
 			if (not showSelf) then
@@ -6034,6 +6058,11 @@ end
 
 		if (shouldUpdate) then
 			curFPSData.platesUpdatedThisFrame = curFPSData.platesUpdatedThisFrame + 1
+			
+			--Temucraft: the client shows parts of the 3.3.5 plate again (cast bar of the target), keep them hidden
+			if (tickFrame.PlateFrame) then
+				PlaterTemucraft.KeepHidden(tickFrame.PlateFrame.UnitFrame)
+			end
 			
 			--make the db path smaller for performance
 			local actorTypeDBConfig = DB_PLATE_CONFIG [tickFrame.actorType]
@@ -8234,17 +8263,17 @@ end
 
 		if (profile.auto_inside_raid_dungeon.hide_enemy_player_pets) then
 			if (zoneType == "party" or zoneType == "raid") then
-				SetCVar("nameplateShowEnemyPets", CVAR_DISABLED)
+				PlaterTemucraft.SetCVar("nameplateShowEnemyPets", CVAR_DISABLED)
 			else
-				SetCVar("nameplateShowEnemyPets", CVAR_ENABLED)
+				PlaterTemucraft.SetCVar("nameplateShowEnemyPets", CVAR_ENABLED)
 			end
 		end
 
 		if (profile.auto_inside_raid_dungeon.hide_enemy_player_totems) then
 			if (zoneType == "party" or zoneType == "raid") then
-				SetCVar("nameplateShowEnemyTotems", CVAR_DISABLED)
+				PlaterTemucraft.SetCVar("nameplateShowEnemyTotems", CVAR_DISABLED)
 			else
-				SetCVar("nameplateShowEnemyTotems", CVAR_ENABLED)
+				PlaterTemucraft.SetCVar("nameplateShowEnemyTotems", CVAR_ENABLED)
 			end
 		end
 
@@ -8252,20 +8281,20 @@ end
 		if (profile.auto_toggle_friendly_enabled) then
 			--discover which is the map type the player is in
 			if (zoneType == "party") then
-				SetCVar ("nameplateShowFriends", profile.auto_toggle_friendly ["party"] and CVAR_ENABLED or CVAR_DISABLED)
+				PlaterTemucraft.SetCVar ("nameplateShowFriends", profile.auto_toggle_friendly ["party"] and CVAR_ENABLED or CVAR_DISABLED)
 				
 			elseif (zoneType == "raid") then
-				SetCVar ("nameplateShowFriends", profile.auto_toggle_friendly ["raid"] and CVAR_ENABLED or CVAR_DISABLED)
+				PlaterTemucraft.SetCVar ("nameplateShowFriends", profile.auto_toggle_friendly ["raid"] and CVAR_ENABLED or CVAR_DISABLED)
 				
 			elseif (zoneType == "arena" or zoneType == "pvp") then
-				SetCVar ("nameplateShowFriends", profile.auto_toggle_friendly ["arena"] and CVAR_ENABLED or CVAR_DISABLED)
+				PlaterTemucraft.SetCVar ("nameplateShowFriends", profile.auto_toggle_friendly ["arena"] and CVAR_ENABLED or CVAR_DISABLED)
 				
 			else
 				--if the player is resting, consider inside a major city
 				if (IsResting()) then
-					SetCVar ("nameplateShowFriends", profile.auto_toggle_friendly ["cities"] and CVAR_ENABLED or CVAR_DISABLED)
+					PlaterTemucraft.SetCVar ("nameplateShowFriends", profile.auto_toggle_friendly ["cities"] and CVAR_ENABLED or CVAR_DISABLED)
 				else
-					SetCVar ("nameplateShowFriends", profile.auto_toggle_friendly ["world"] and CVAR_ENABLED or CVAR_DISABLED)
+					PlaterTemucraft.SetCVar ("nameplateShowFriends", profile.auto_toggle_friendly ["world"] and CVAR_ENABLED or CVAR_DISABLED)
 				end
 			end
 		end
@@ -8274,20 +8303,20 @@ end
 		if (profile.auto_toggle_stacking_enabled and profile.stacking_nameplates_enabled) then
 			--discover which is the map type the player is in
 			if (zoneType == "party") then
-				SetCVar ("nameplateMotion", profile.auto_toggle_stacking ["party"] and CVAR_ENABLED or CVAR_DISABLED)
+				PlaterTemucraft.SetCVar ("nameplateMotion", profile.auto_toggle_stacking ["party"] and CVAR_ENABLED or CVAR_DISABLED)
 				
 			elseif (zoneType == "raid") then
-				SetCVar ("nameplateMotion", profile.auto_toggle_stacking ["raid"] and CVAR_ENABLED or CVAR_DISABLED)
+				PlaterTemucraft.SetCVar ("nameplateMotion", profile.auto_toggle_stacking ["raid"] and CVAR_ENABLED or CVAR_DISABLED)
 				
 			elseif (zoneType == "arena" or zoneType == "pvp") then
-				SetCVar ("nameplateMotion", profile.auto_toggle_stacking ["arena"] and CVAR_ENABLED or CVAR_DISABLED)
+				PlaterTemucraft.SetCVar ("nameplateMotion", profile.auto_toggle_stacking ["arena"] and CVAR_ENABLED or CVAR_DISABLED)
 				
 			else
 				--if the player is resting, consider inside a major city
 				if (IsResting()) then
-					SetCVar ("nameplateMotion", profile.auto_toggle_stacking ["cities"] and CVAR_ENABLED or CVAR_DISABLED)
+					PlaterTemucraft.SetCVar ("nameplateMotion", profile.auto_toggle_stacking ["cities"] and CVAR_ENABLED or CVAR_DISABLED)
 				else
-					SetCVar ("nameplateMotion", profile.auto_toggle_stacking ["world"] and CVAR_ENABLED or CVAR_DISABLED)
+					PlaterTemucraft.SetCVar ("nameplateMotion", profile.auto_toggle_stacking ["world"] and CVAR_ENABLED or CVAR_DISABLED)
 				end
 			end
 		end
@@ -9130,80 +9159,80 @@ function Plater.SetCVarsOnFirstRun()
 	--> these are the cvars set for each character when they logon
 	
 	--disabled:
-		--SetCVar ("nameplateShowSelf", CVAR_DISABLED)
-		--SetCVar ("nameplateShowFriends", CVAR_ENABLED)
+		--PlaterTemucraft.SetCVar ("nameplateShowSelf", CVAR_DISABLED)
+		--PlaterTemucraft.SetCVar ("nameplateShowFriends", CVAR_ENABLED)
 	--> location of the personal bar
-	--	SetCVar ("nameplateSelfBottomInset", 20 / 100)
-	--	SetCVar ("nameplateSelfTopInset", abs (20 - 99) / 100)
+	--	PlaterTemucraft.SetCVar ("nameplateSelfBottomInset", 20 / 100)
+	--	PlaterTemucraft.SetCVar ("nameplateSelfTopInset", abs (20 - 99) / 100)
 	
 	--> set the stacking to true
-	--SetCVar ("nameplateMotion", CVAR_ENABLED) --March 08, 2019 don't change the stacking type when installing plater
+	--PlaterTemucraft.SetCVar ("nameplateMotion", CVAR_ENABLED) --March 08, 2019 don't change the stacking type when installing plater
 	--> distance between each nameplate when using stacking
-	--SetCVar ("nameplateOverlapV", 1.25)
+	--PlaterTemucraft.SetCVar ("nameplateOverlapV", 1.25)
 	
 	--> make nameplates always shown and down't show minions
-	SetCVar ("nameplateShowAll", CVAR_ENABLED)
+	PlaterTemucraft.SetCVar ("nameplateShowAll", CVAR_ENABLED)
 	if IS_WOW_PROJECT_MAINLINE then
-		SetCVar ("ShowNamePlateLoseAggroFlash", CVAR_ENABLED) --blizzard flash
+		PlaterTemucraft.SetCVar ("ShowNamePlateLoseAggroFlash", CVAR_ENABLED) --blizzard flash
 	end
 	
 	--scale when it is too far away from the camera
-	SetCVar ("nameplateMinScale", 1)
+	PlaterTemucraft.SetCVar ("nameplateMinScale", 1)
 	--scale of the nameplate for important units, default is 1.2 which makes the nameplate be too big with the 1.15 target scale
-	SetCVar ("nameplateLargerScale", 1.10)
+	PlaterTemucraft.SetCVar ("nameplateLargerScale", 1.10)
 	
 	--enable enemy minus nameplates
-	SetCVar ("nameplateShowEnemyMinions", CVAR_ENABLED)
-	SetCVar ("nameplateShowEnemyMinus", CVAR_ENABLED)
+	PlaterTemucraft.SetCVar ("nameplateShowEnemyMinions", CVAR_ENABLED)
+	PlaterTemucraft.SetCVar ("nameplateShowEnemyMinus", CVAR_ENABLED)
 	
 	--don't show friendly npcs
-	SetCVar ("nameplateShowFriendlyNPCs", 0)
+	PlaterTemucraft.SetCVar ("nameplateShowFriendlyNPCs", 0)
 	--disable friendly minius nameplates
-	SetCVar ("nameplateShowFriendlyGuardians", CVAR_DISABLED)
-	SetCVar ("nameplateShowFriendlyPets", CVAR_DISABLED)
-	SetCVar ("nameplateShowFriendlyTotems", CVAR_DISABLED)
-	SetCVar ("nameplateShowFriendlyMinions", CVAR_DISABLED)
+	PlaterTemucraft.SetCVar ("nameplateShowFriendlyGuardians", CVAR_DISABLED)
+	PlaterTemucraft.SetCVar ("nameplateShowFriendlyPets", CVAR_DISABLED)
+	PlaterTemucraft.SetCVar ("nameplateShowFriendlyTotems", CVAR_DISABLED)
+	PlaterTemucraft.SetCVar ("nameplateShowFriendlyMinions", CVAR_DISABLED)
 	
 	--> make it show the class color of players
-	SetCVar ("ShowClassColorInNameplate", CVAR_ENABLED)
+	PlaterTemucraft.SetCVar ("ShowClassColorInNameplate", CVAR_ENABLED)
 	
 	--> lock nameplates to screen
-	SetCVar ("nameplateOtherTopInset", "0.085")
-	SetCVar ("nameplateLargeTopInset", "0.085")
-	SetCVar ("clampTargetNameplateToScreen", "1")
-	SetCVar ("nameplateTargetRadialPosition", "1")
-	SetCVar ("nameplateTargetBehindMaxDistance", "30")
+	PlaterTemucraft.SetCVar ("nameplateOtherTopInset", "0.085")
+	PlaterTemucraft.SetCVar ("nameplateLargeTopInset", "0.085")
+	PlaterTemucraft.SetCVar ("clampTargetNameplateToScreen", "1")
+	PlaterTemucraft.SetCVar ("nameplateTargetRadialPosition", "1")
+	PlaterTemucraft.SetCVar ("nameplateTargetBehindMaxDistance", "30")
 
 	--> reset the horizontal and vertical scale
-	SetCVar ("NamePlateHorizontalScale", CVAR_ENABLED)
-	SetCVar ("NamePlateVerticalScale", CVAR_ENABLED)
+	PlaterTemucraft.SetCVar ("NamePlateHorizontalScale", CVAR_ENABLED)
+	PlaterTemucraft.SetCVar ("NamePlateVerticalScale", CVAR_ENABLED)
 	if IS_WOW_PROJECT_MAINLINE then
-		SetCVar ("NamePlateClassificationScale", CVAR_ENABLED)
+		PlaterTemucraft.SetCVar ("NamePlateClassificationScale", CVAR_ENABLED)
 	end
 	
 	--> make the selection be a little bigger
-	SetCVar ("nameplateSelectedScale", "1.15")
+	PlaterTemucraft.SetCVar ("nameplateSelectedScale", "1.15")
 
 	--> movement speed of nameplates when using stacking, going above this isn't recommended
-	SetCVar ("nameplateMotionSpeed", "0.05")
+	PlaterTemucraft.SetCVar ("nameplateMotionSpeed", "0.05")
 
 	--> make the personal bar hide very fast
-	SetCVar ("nameplatePersonalHideDelaySeconds", 0.2)
+	PlaterTemucraft.SetCVar ("nameplatePersonalHideDelaySeconds", 0.2)
 	
 	--> don't show debuffs on blizzard healthbars
-	SetCVar ("nameplateShowDebuffsOnFriendly", CVAR_DISABLED)
+	PlaterTemucraft.SetCVar ("nameplateShowDebuffsOnFriendly", CVAR_DISABLED)
 
 	--> view distance
 	if IS_WOW_PROJECT_MAINLINE then
-		SetCVar ("nameplateMaxDistance", 60)
+		PlaterTemucraft.SetCVar ("nameplateMaxDistance", 60)
 	else
-		SetCVar ("nameplateMaxDistance", 41)
+		PlaterTemucraft.SetCVar ("nameplateMaxDistance", 41)
 	end
 	
 	--> ensure resource on target consistency:
 	if IS_WOW_PROJECT_MAINLINE then
-		PlaterDBChr.resources_on_target = GetCVar ("nameplateResourceOnTarget") == CVAR_ENABLED
-		SetCVar ("nameplateResourceOnTarget", CVAR_DISABLED)
+		PlaterDBChr.resources_on_target = PlaterTemucraft.GetCVar ("nameplateResourceOnTarget") == CVAR_ENABLED
+		PlaterTemucraft.SetCVar ("nameplateResourceOnTarget", CVAR_DISABLED)
 	end
 	
 	PlaterDBChr.first_run3 [UnitGUID ("player")] = true
@@ -9235,7 +9264,7 @@ end
 	local GameTooltipFrameTextLeft2 = _G ["PlaterScanTooltipTextLeft2"]
 	
 	function Plater.GetActorSubName (plateFrame) --private
-		local cbMode = GetCVar("colorblindMode") == "1"
+		local cbMode = PlaterTemucraft.GetCVar("colorblindMode") == "1"
 		GameTooltipFrame:SetOwner (WorldFrame, "ANCHOR_NONE")
 		GameTooltipFrame:SetHyperlink ("unit:" .. (plateFrame [MEMBER_GUID] or ''))
 		if cbMode then
@@ -9472,7 +9501,7 @@ end
 	--attempt to get the role of the unit shown in the nameplate
 	function Plater.GetUnitRole (unitFrame)
 		if IS_WOW_PROJECT_MAINLINE then
-			local assignedRole = UnitGroupRolesAssigned (unitFrame.unit)
+			local assignedRole = PlaterTemucraft.Modern.UnitGroupRolesAssigned (unitFrame.unit)
 			if (assignedRole and assignedRole ~= "NONE") then
 				return assignedRole
 			end
@@ -9511,7 +9540,7 @@ end
 			
 		else
 			if IS_WOW_PROJECT_CLASSIC_WRATH then
-				local assignedRole = UnitGroupRolesAssigned (unitFrame.unit)
+				local assignedRole = PlaterTemucraft.Modern.UnitGroupRolesAssigned (unitFrame.unit)
 				if (assignedRole and assignedRole ~= "NONE") then
 					return assignedRole
 				end
@@ -9644,7 +9673,7 @@ end
 	
 	function Plater.SafeSetCVar (variableName, value)
 		--check if is a valid cvar
-		if (GetCVar (variableName) == nil) then
+		if (PlaterTemucraft.GetCVar (variableName) == nil) then
 			Plater:Msg ("invalid cvar for Plater.SafeSetCVar()")
 			return
 		end
@@ -9667,10 +9696,10 @@ end
 		--store the default value if there's no default value set yet
 		local cvarCache = Plater.db.profile.cvar_default_cache
 		if (cvarCache [variableName] == nil) then
-			cvarCache [variableName] = GetCVar (variableName)
+			cvarCache [variableName] = PlaterTemucraft.GetCVar (variableName)
 		end
 		
-		SetCVar (variableName, value)
+		PlaterTemucraft.SetCVar (variableName, value)
 		return true
 	end
 	
@@ -9683,7 +9712,7 @@ end
 	
 	function Plater.RestoreCVar (variableName)
 		--check if is a valid cvar
-		if (GetCVar (variableName) == nil) then
+		if (PlaterTemucraft.GetCVar (variableName) == nil) then
 			Plater:Msg ("invalid cvar for Plater.SafeSetCVar()")
 			return
 		end
@@ -9705,7 +9734,7 @@ end
 		--restore the value
 		local cvarCache = Plater.db.profile.cvar_default_cache
 		if (cvarCache [variableName]) then
-			SetCVar (variableName, cvarCache [variableName])
+			PlaterTemucraft.SetCVar (variableName, cvarCache [variableName])
 			cvarCache [variableName] = nil
 			return true
 		end
@@ -12285,7 +12314,7 @@ end
 			t ["options"] = scriptObject.Options or {}
 			
 			t ["addon"] = "Plater"
-			t ["tocversion"] = select(4, GetBuildInfo()) -- provide export toc
+			t ["tocversion"] = select(4, PlaterTemucraft.Modern.GetBuildInfo()) -- provide export toc
 			t ["type"] = "hook"
 			t ["UID"] = scriptObject.UID
 			
@@ -12313,7 +12342,7 @@ end
 			t ["options"] = scriptObject.Options or {}
 			
 			t ["addon"] = "Plater"
-			t ["tocversion"] = select(4, GetBuildInfo()) -- provide export toc
+			t ["tocversion"] = select(4, PlaterTemucraft.Modern.GetBuildInfo()) -- provide export toc
 			t ["type"] = "script"
 			
 			return t
@@ -12595,7 +12624,7 @@ function SlashCmdList.PLATER (msg, editbox)
 		print ("Plater Diagnostic:")
 		for i = 1, #cvarDiagList do
 			local cvar = cvarDiagList [i]
-			print ("|cFFC0C0C0" .. cvar, "|r->", GetCVar (cvar))
+			print ("|cFFC0C0C0" .. cvar, "|r->", PlaterTemucraft.GetCVar (cvar))
 		end
 		
 		local alphaPlateFrame = "there's no nameplate in the screen"

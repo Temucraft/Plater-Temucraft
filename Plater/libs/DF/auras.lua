@@ -9,6 +9,8 @@ local tinsert = tinsert
 local GetSpellInfo = GetSpellInfo
 local lower = string.lower
 local GetSpellBookItemInfo = GetSpellBookItemInfo
+--Temucraft: UnitAura with the newer return values (the 3.3.5 one has the rank second)
+local UnitAura = TemucraftCompat and TemucraftCompat.Modern and TemucraftCompat.Modern.UnitAura or UnitAura
 
 local CONST_MAX_SPELLS = 400000
 

@@ -1285,11 +1285,11 @@ function Plater.OpenOptionsPanel()
 
 function Plater.ChangeNameplateAnchor (_, _, value)
 	if (value == 0) then
-		SetCVar ("nameplateOtherAtBase", "0") --head
+		PlaterTemucraft.SetCVar ("nameplateOtherAtBase", "0") --head
 	elseif (value == 1) then
-		SetCVar ("nameplateOtherAtBase", "1") --both
+		PlaterTemucraft.SetCVar ("nameplateOtherAtBase", "1") --both
 	elseif (value == 2) then
-		SetCVar ("nameplateOtherAtBase", "2") --feet
+		PlaterTemucraft.SetCVar ("nameplateOtherAtBase", "2") --feet
 	end
 end
 local nameplate_anchor_options = {
@@ -5178,12 +5178,12 @@ do
 		},
 		{
 			type = "toggle",
-			get = function() return GetCVarBool ("nameplatePersonalShowAlways") end,
+			get = function() return PlaterTemucraft.GetCVarBool ("nameplatePersonalShowAlways") end,
 			set = function (self, fixedparam, value) 
 				if (value) then
-					SetCVar ("nameplatePersonalShowAlways", CVAR_ENABLED)
+					PlaterTemucraft.SetCVar ("nameplatePersonalShowAlways", CVAR_ENABLED)
 				else
-					SetCVar ("nameplatePersonalShowAlways", CVAR_DISABLED)
+					PlaterTemucraft.SetCVar ("nameplatePersonalShowAlways", CVAR_DISABLED)
 				end
 			end,
 			nocombat = true,
@@ -5193,12 +5193,12 @@ do
 
 		{
 			type = "toggle",
-			get = function() return GetCVarBool ("nameplatePersonalShowWithTarget") end,
+			get = function() return PlaterTemucraft.GetCVarBool ("nameplatePersonalShowWithTarget") end,
 			set = function (self, fixedparam, value) 
 				if (value) then
-					SetCVar ("nameplatePersonalShowWithTarget", CVAR_ENABLED)
+					PlaterTemucraft.SetCVar ("nameplatePersonalShowWithTarget", CVAR_ENABLED)
 				else
-					SetCVar ("nameplatePersonalShowWithTarget", CVAR_DISABLED)
+					PlaterTemucraft.SetCVar ("nameplatePersonalShowWithTarget", CVAR_DISABLED)
 				end
 			end,
 			nocombat = true,
@@ -5207,12 +5207,12 @@ do
 		},
 		{
 			type = "toggle",
-			get = function() return GetCVarBool ("nameplatePersonalShowInCombat") end,
+			get = function() return PlaterTemucraft.GetCVarBool ("nameplatePersonalShowInCombat") end,
 			set = function (self, fixedparam, value) 
 				if (value) then
-					SetCVar ("nameplatePersonalShowInCombat", CVAR_ENABLED)
+					PlaterTemucraft.SetCVar ("nameplatePersonalShowInCombat", CVAR_ENABLED)
 				else
-					SetCVar ("nameplatePersonalShowInCombat", CVAR_DISABLED)
+					PlaterTemucraft.SetCVar ("nameplatePersonalShowInCombat", CVAR_DISABLED)
 				end
 			end,
 			nocombat = true,
@@ -5221,10 +5221,10 @@ do
 		},
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar ("nameplateSelfAlpha")) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar ("nameplateSelfAlpha")) end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateSelfAlpha", value)
+					PlaterTemucraft.SetCVar ("nameplateSelfAlpha", value)
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
 				end
@@ -5240,10 +5240,10 @@ do
 		},
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar ("nameplateSelfScale")) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar ("nameplateSelfScale")) end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateSelfScale", value)
+					PlaterTemucraft.SetCVar ("nameplateSelfScale", value)
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
 				end
@@ -5351,8 +5351,8 @@ do
 		{
 			type = "execute",
 			func = function() 
-				SetCVar ("nameplateSelfTopInset", 0.50)
-				SetCVar ("nameplateSelfBottomInset", 0.20)
+				PlaterTemucraft.SetCVar ("nameplateSelfTopInset", 0.50)
+				PlaterTemucraft.SetCVar ("nameplateSelfBottomInset", 0.20)
 			end,
 			desc = "When using a fixed position and want to go back to Blizzard default." .. CVarDesc,
 			name = "Reset to Automatic Position" .. CVarIcon,
@@ -5361,20 +5361,20 @@ do
 		
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar ("nameplateSelfBottomInset")*100) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar ("nameplateSelfBottomInset")*100) end,
 			set = function (self, fixedparam, value) 
 				--Plater.db.profile.plate_config.player.y_position_offset = value
 
 				if (InCombatLockdown()) then
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (tonumber (GetCVar ("nameplateSelfBottomInset")*100))
+					self:SetValue (tonumber (PlaterTemucraft.GetCVar ("nameplateSelfBottomInset")*100))
 					return
 				end
 
 				value = floor (value)
 				
-				SetCVar ("nameplateSelfBottomInset", value / 100)
-				SetCVar ("nameplateSelfTopInset", abs (value - 99) / 100)
+				PlaterTemucraft.SetCVar ("nameplateSelfBottomInset", value / 100)
+				PlaterTemucraft.SetCVar ("nameplateSelfTopInset", abs (value - 99) / 100)
 				
 				if (not Plater.PersonalAdjustLocation) then
 					Plater.PersonalAdjustLocation = CreateFrame ("frame", "PlaterPersonalBarLocation", UIParent, BackdropTemplateMixin and "BackdropTemplate")
@@ -6428,14 +6428,14 @@ local targetOptions = {
 		
 		{
 			type = "toggle",
-			get = function() return GetCVarBool ("nameplateTargetRadialPosition") end,
+			get = function() return PlaterTemucraft.GetCVarBool ("nameplateTargetRadialPosition") end,
 			set = function (self, fixedparam, value) 
 				if (value) then
-					SetCVar ("clampTargetNameplateToScreen", CVAR_ENABLED)
-					SetCVar ("nameplateTargetRadialPosition", CVAR_ENABLED)
+					PlaterTemucraft.SetCVar ("clampTargetNameplateToScreen", CVAR_ENABLED)
+					PlaterTemucraft.SetCVar ("nameplateTargetRadialPosition", CVAR_ENABLED)
 				else
-					SetCVar ("clampTargetNameplateToScreen", CVAR_DISABLED)
-					SetCVar ("nameplateTargetRadialPosition", CVAR_DISABLED)
+					PlaterTemucraft.SetCVar ("clampTargetNameplateToScreen", CVAR_DISABLED)
+					PlaterTemucraft.SetCVar ("nameplateTargetRadialPosition", CVAR_DISABLED)
 				end
 			end,
 			nocombat = true,
@@ -6446,16 +6446,16 @@ local targetOptions = {
 		
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar ("nameplateOtherTopInset")) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar ("nameplateOtherTopInset")) end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
 					if (value == 0) then
-						SetCVar ("nameplateOtherTopInset", -1)
-						SetCVar ("nameplateLargeTopInset", -1)
+						PlaterTemucraft.SetCVar ("nameplateOtherTopInset", -1)
+						PlaterTemucraft.SetCVar ("nameplateLargeTopInset", -1)
 						
 					else
-						SetCVar ("nameplateOtherTopInset", value)
-						SetCVar ("nameplateLargeTopInset", value)
+						PlaterTemucraft.SetCVar ("nameplateOtherTopInset", value)
+						PlaterTemucraft.SetCVar ("nameplateLargeTopInset", value)
 						
 					end
 				else
@@ -6468,16 +6468,16 @@ local targetOptions = {
 			thumbscale = 1.7,
 			usedecimals = true,
 			name = "Lock to Screen (Top Side)" .. CVarIcon,
-			desc = "Min space between the nameplate and the top of the screen. Increase this if some part of the nameplate are going out of the screen.\n\n|cFFFFFFFFDefault: 0.065|r\n\n" .. ImportantText .. "if you're having issue, manually set using these macros:\n/run SetCVar ('nameplateOtherTopInset', '0.065')\n/run SetCVar ('nameplateLargeTopInset', '0.065')\n\n" .. ImportantText .. "setting to 0 disables this feature." .. CVarDesc,
+			desc = "Min space between the nameplate and the top of the screen. Increase this if some part of the nameplate are going out of the screen.\n\n|cFFFFFFFFDefault: 0.065|r\n\n" .. ImportantText .. "if you're having issue, manually set using these macros:\n/run PlaterTemucraft.SetCVar ('nameplateOtherTopInset', '0.065')\n/run PlaterTemucraft.SetCVar ('nameplateLargeTopInset', '0.065')\n\n" .. ImportantText .. "setting to 0 disables this feature." .. CVarDesc,
 			nocombat = true,
 		},
 		
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar ("nameplateTargetBehindMaxDistance")) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar ("nameplateTargetBehindMaxDistance")) end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateTargetBehindMaxDistance", value)
+					PlaterTemucraft.SetCVar ("nameplateTargetBehindMaxDistance", value)
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
 				end
@@ -6493,10 +6493,10 @@ local targetOptions = {
 		
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar ("nameplateSelectedScale")) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar ("nameplateSelectedScale")) end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateSelectedScale", value)
+					PlaterTemucraft.SetCVar ("nameplateSelectedScale", value)
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
 				end
@@ -6724,13 +6724,13 @@ local relevance_options = {
 		{
 			type = "toggle",
 			boxfirst = true,
-			get = function() return GetCVar ("nameplateShowSelf") == CVAR_ENABLED end,
+			get = function() return PlaterTemucraft.GetCVar ("nameplateShowSelf") == CVAR_ENABLED end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateShowSelf", math.abs (tonumber (GetCVar ("nameplateShowSelf") or 1)-1))
+					PlaterTemucraft.SetCVar ("nameplateShowSelf", math.abs (tonumber (PlaterTemucraft.GetCVar ("nameplateShowSelf") or 1)-1))
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVar ("nameplateShowSelf") == CVAR_ENABLED)
+					self:SetValue (PlaterTemucraft.GetCVar ("nameplateShowSelf") == CVAR_ENABLED)
 				end
 			end,
 			name = "Personal Health and Mana Bars" .. CVarIcon,
@@ -6748,7 +6748,7 @@ local relevance_options = {
 					Plater.db.profile.resources_settings.global_settings.show = false
 				end
 				if (not InCombatLockdown()) then
-					SetCVar (CVAR_RESOURCEONTARGET, CVAR_DISABLED) -- reset this to false always, as it conflicts
+					PlaterTemucraft.SetCVar (CVAR_RESOURCEONTARGET, CVAR_DISABLED) -- reset this to false always, as it conflicts
 				end
 			end,
 			name = "Show Resources on Target",
@@ -6759,13 +6759,13 @@ local relevance_options = {
 		{
 			type = "toggle",
 			boxfirst = true,
-			get = function() return GetCVar (CVAR_SHOWALL) == CVAR_ENABLED end,
+			get = function() return PlaterTemucraft.GetCVar (CVAR_SHOWALL) == CVAR_ENABLED end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar (CVAR_SHOWALL, math.abs (tonumber (GetCVar (CVAR_SHOWALL))-1))
+					PlaterTemucraft.SetCVar (CVAR_SHOWALL, math.abs (tonumber (PlaterTemucraft.GetCVar (CVAR_SHOWALL))-1))
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVar (CVAR_SHOWALL) == CVAR_ENABLED)
+					self:SetValue (PlaterTemucraft.GetCVar (CVAR_SHOWALL) == CVAR_ENABLED)
 				end
 			end,
 			name = "Always Show Nameplates" .. CVarIcon,
@@ -6787,10 +6787,10 @@ local relevance_options = {
 		},
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar ("nameplateOccludedAlphaMult")) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar ("nameplateOccludedAlphaMult")) end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateOccludedAlphaMult", value)
+					PlaterTemucraft.SetCVar ("nameplateOccludedAlphaMult", value)
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
 				end
@@ -6810,14 +6810,14 @@ local relevance_options = {
 		{
 			type = "toggle",
 			boxfirst = true,
-			get = function() return GetCVarBool (CVAR_PLATEMOTION) end, --GetCVar (CVAR_PLATEMOTION) == CVAR_ENABLED
+			get = function() return PlaterTemucraft.GetCVarBool (CVAR_PLATEMOTION) end, --PlaterTemucraft.GetCVar (CVAR_PLATEMOTION) == CVAR_ENABLED
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar (CVAR_PLATEMOTION, value and "1" or "0")
+					PlaterTemucraft.SetCVar (CVAR_PLATEMOTION, value and "1" or "0")
 					Plater.db.profile.stacking_nameplates_enabled = value
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVar (CVAR_PLATEMOTION) == CVAR_ENABLED)
+					self:SetValue (PlaterTemucraft.GetCVar (CVAR_PLATEMOTION) == CVAR_ENABLED)
 				end
 			end,
 			name = "Stacking Nameplates" .. CVarIcon,
@@ -6827,10 +6827,10 @@ local relevance_options = {
 		
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar ("nameplateOverlapV")) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar ("nameplateOverlapV")) end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateOverlapV", value)
+					PlaterTemucraft.SetCVar ("nameplateOverlapV", value)
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
 				end
@@ -6841,16 +6841,16 @@ local relevance_options = {
 			thumbscale = 1.7,
 			usedecimals = true,
 			name = "Nameplate Overlap (V)" .. CVarIcon,
-			desc = "The space between each nameplate vertically when stacking is enabled.\n\n|cFFFFFFFFDefault: 1.10|r" .. CVarDesc .. "\n\n" .. ImportantText .. "if you find issues with this setting, use:\n|cFFFFFFFF/run SetCVar ('nameplateOverlapV', '1.6')|r",
+			desc = "The space between each nameplate vertically when stacking is enabled.\n\n|cFFFFFFFFDefault: 1.10|r" .. CVarDesc .. "\n\n" .. ImportantText .. "if you find issues with this setting, use:\n|cFFFFFFFF/run PlaterTemucraft.SetCVar ('nameplateOverlapV', '1.6')|r",
 			nocombat = true,
 		},
 		
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar (CVAR_CULLINGDISTANCE)) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar (CVAR_CULLINGDISTANCE)) end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar (CVAR_CULLINGDISTANCE, value)
+					PlaterTemucraft.SetCVar (CVAR_CULLINGDISTANCE, value)
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
 				end
@@ -6868,13 +6868,13 @@ local relevance_options = {
 		{
 			type = "toggle",
 			boxfirst = true,
-			get = function() return GetCVarBool ("nameplateShowEnemies") end,
+			get = function() return PlaterTemucraft.GetCVarBool ("nameplateShowEnemies") end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateShowEnemies", value and "1" or "0")
+					PlaterTemucraft.SetCVar ("nameplateShowEnemies", value and "1" or "0")
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVarBool ("nameplateShowEnemies"))
+					self:SetValue (PlaterTemucraft.GetCVarBool ("nameplateShowEnemies"))
 				end
 			end,
 			name = "Show Enemy Nameplates" .. CVarIcon,
@@ -6885,13 +6885,13 @@ local relevance_options = {
 		{
 			type = "toggle",
 			boxfirst = true,
-			get = function() return GetCVarBool ("nameplateShowFriends") end,
+			get = function() return PlaterTemucraft.GetCVarBool ("nameplateShowFriends") end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateShowFriends", value and "1" or "0")
+					PlaterTemucraft.SetCVar ("nameplateShowFriends", value and "1" or "0")
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVarBool ("nameplateShowFriends"))
+					self:SetValue (PlaterTemucraft.GetCVarBool ("nameplateShowFriends"))
 				end
 			end,
 			name = "Show Friendly Nameplates" .. CVarIcon,
@@ -6902,13 +6902,13 @@ local relevance_options = {
 		{
 			type = "toggle",
 			boxfirst = true,
-			get = function() return GetCVarBool ("nameplateShowOnlyNames") end,
+			get = function() return PlaterTemucraft.GetCVarBool ("nameplateShowOnlyNames") end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateShowOnlyNames", value and "1" or "0")
+					PlaterTemucraft.SetCVar ("nameplateShowOnlyNames", value and "1" or "0")
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVarBool ("nameplateShowOnlyNames"))
+					self:SetValue (PlaterTemucraft.GetCVarBool ("nameplateShowOnlyNames"))
 				end
 			end,
 			name = "Hide Blizzard Health Bars" .. CVarIcon,
@@ -9796,13 +9796,13 @@ end
 		},
 		{
 			type = "toggle",
-			get = function() return GetCVarBool ("nameplateShowFriendlyNPCs") end,
+			get = function() return PlaterTemucraft.GetCVarBool ("nameplateShowFriendlyNPCs") end,
 			set = function (self, fixedparam, value) 
 				if (value) then
-					SetCVar ("nameplateShowFriendlyNPCs", CVAR_ENABLED)
+					PlaterTemucraft.SetCVar ("nameplateShowFriendlyNPCs", CVAR_ENABLED)
 					Plater.db.profile.plate_config [ACTORTYPE_FRIENDLY_NPC].enabled = true
 				else
-					SetCVar ("nameplateShowFriendlyNPCs", CVAR_DISABLED)
+					PlaterTemucraft.SetCVar ("nameplateShowFriendlyNPCs", CVAR_DISABLED)
 					Plater.db.profile.plate_config [ACTORTYPE_FRIENDLY_NPC].enabled = false
 				end
 			end,
@@ -9815,10 +9815,10 @@ end
 			get = function() return Plater.db.profile.plate_config.friendlynpc.module_enabled end,
 			set = function (self, fixedparam, value) 
 				if (value) then
-					--SetCVar ("nameplateShowFriendlyNPCs", CVAR_ENABLED)
+					--PlaterTemucraft.SetCVar ("nameplateShowFriendlyNPCs", CVAR_ENABLED)
 					Plater.db.profile.plate_config.friendlynpc.module_enabled = true
 				else
-					--SetCVar ("nameplateShowFriendlyNPCs", CVAR_DISABLED)
+					--PlaterTemucraft.SetCVar ("nameplateShowFriendlyNPCs", CVAR_DISABLED)
 					Plater.db.profile.plate_config.friendlynpc.module_enabled = false
 				end
 				ReloadUI()
@@ -10704,7 +10704,7 @@ end
 				Plater.db.profile.plate_config.friendlynpc.quest_enabled = value
 				-- this seems to be gone as of 18.12.2020
 				--if value then
-					--SetCVar("showQuestTrackingTooltips", 1)
+					--PlaterTemucraft.SetCVar("showQuestTrackingTooltips", 1)
 				--end
 				Plater.UpdateAllPlates()
 			end,
@@ -11818,7 +11818,7 @@ end
 					Plater.db.profile.plate_config.enemynpc.quest_enabled = value
 					-- this seems to be gone as of 18.12.2020
 					--if value then
-						--SetCVar("showQuestTrackingTooltips", 1)
+						--PlaterTemucraft.SetCVar("showQuestTrackingTooltips", 1)
 					--end
 					Plater.UpdateAllPlates()
 				end,
@@ -13193,9 +13193,9 @@ end
 			set = function (self, fixedparam, value) 
 				Plater.db.profile.quick_hide = value
 				if (value) then
-					SetCVar ("nameplateRemovalAnimation", CVAR_DISABLED)
+					PlaterTemucraft.SetCVar ("nameplateRemovalAnimation", CVAR_DISABLED)
 				else
-					SetCVar ("nameplateRemovalAnimation", CVAR_ENABLED)
+					PlaterTemucraft.SetCVar ("nameplateRemovalAnimation", CVAR_ENABLED)
 				end
 				Plater.UpdateAllPlates()
 			end,
@@ -13220,16 +13220,16 @@ end
 		{type = "label", get = function() return "Client Settings (CVars):" end, text_template = DF:GetTemplate ("font", "ORANGE_FONT_TEMPLATE")},
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar ("nameplateOtherTopInset")) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar ("nameplateOtherTopInset")) end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
 					if (value == 0) then
-						SetCVar ("nameplateOtherTopInset", -1)
-						SetCVar ("nameplateLargeTopInset", -1)
+						PlaterTemucraft.SetCVar ("nameplateOtherTopInset", -1)
+						PlaterTemucraft.SetCVar ("nameplateLargeTopInset", -1)
 						
 					else
-						SetCVar ("nameplateOtherTopInset", value)
-						SetCVar ("nameplateLargeTopInset", value)
+						PlaterTemucraft.SetCVar ("nameplateOtherTopInset", value)
+						PlaterTemucraft.SetCVar ("nameplateLargeTopInset", value)
 					end
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
@@ -13241,16 +13241,16 @@ end
 			thumbscale = 1.7,
 			usedecimals = true,
 			name = "Lock to Screen (Top Side)" .. CVarIcon,
-			desc = "Min space between the nameplate and the top of the screen. Increase this if some part of the nameplate are going out of the screen.\n\n|cFFFFFFFFDefault: 0.065|r\n\n" .. ImportantText .. "if you're having issue, manually set using these macros:\n/run SetCVar ('nameplateOtherTopInset', '0.065')\n/run SetCVar ('nameplateLargeTopInset', '0.065')\n\n" .. ImportantText .. "setting to 0 disables this feature." .. CVarDesc,
+			desc = "Min space between the nameplate and the top of the screen. Increase this if some part of the nameplate are going out of the screen.\n\n|cFFFFFFFFDefault: 0.065|r\n\n" .. ImportantText .. "if you're having issue, manually set using these macros:\n/run PlaterTemucraft.SetCVar ('nameplateOtherTopInset', '0.065')\n/run PlaterTemucraft.SetCVar ('nameplateLargeTopInset', '0.065')\n\n" .. ImportantText .. "setting to 0 disables this feature." .. CVarDesc,
 			nocombat = true,
 		},
 		
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar ("nameplateOverlapV")) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar ("nameplateOverlapV")) end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateOverlapV", value)
+					PlaterTemucraft.SetCVar ("nameplateOverlapV", value)
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
 				end
@@ -13261,15 +13261,15 @@ end
 			thumbscale = 1.7,
 			usedecimals = true,
 			name = "Nameplate Overlap (V)" .. CVarIcon,
-			desc = "The space between each nameplate vertically when stacking is enabled.\n\n|cFFFFFFFFDefault: 1.10|r" .. CVarDesc .. "\n\n" .. ImportantText .. "if you find issues with this setting, use:\n|cFFFFFFFF/run SetCVar ('nameplateOverlapV', '1.6')|r",
+			desc = "The space between each nameplate vertically when stacking is enabled.\n\n|cFFFFFFFFDefault: 1.10|r" .. CVarDesc .. "\n\n" .. ImportantText .. "if you find issues with this setting, use:\n|cFFFFFFFF/run PlaterTemucraft.SetCVar ('nameplateOverlapV', '1.6')|r",
 			nocombat = true,
 		},
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar ("nameplateOverlapH")) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar ("nameplateOverlapH")) end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateOverlapH", value)
+					PlaterTemucraft.SetCVar ("nameplateOverlapH", value)
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
 				end
@@ -13280,16 +13280,16 @@ end
 			thumbscale = 1.7,
 			usedecimals = true,
 			name = "Nameplate Overlap (H)" .. CVarIcon,
-			desc = "The space between each nameplate horizontally when stacking is enabled.\n\n|cFFFFFFFFDefault: 0.8|r" .. CVarDesc .. "\n\n" .. ImportantText .. "if you find issues with this setting, use:\n|cFFFFFFFF/run SetCVar ('nameplateOverlapH', '0.8')|r",
+			desc = "The space between each nameplate horizontally when stacking is enabled.\n\n|cFFFFFFFFDefault: 0.8|r" .. CVarDesc .. "\n\n" .. ImportantText .. "if you find issues with this setting, use:\n|cFFFFFFFF/run PlaterTemucraft.SetCVar ('nameplateOverlapH', '0.8')|r",
 			nocombat = true,
 		},
 		
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar (CVAR_MOVEMENT_SPEED)) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar (CVAR_MOVEMENT_SPEED)) end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar (CVAR_MOVEMENT_SPEED, value)
+					PlaterTemucraft.SetCVar (CVAR_MOVEMENT_SPEED, value)
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
 				end
@@ -13305,10 +13305,10 @@ end
 		},
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar ("nameplateGlobalScale")) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar ("nameplateGlobalScale")) end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateGlobalScale", value)
+					PlaterTemucraft.SetCVar ("nameplateGlobalScale", value)
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
 				end
@@ -13325,10 +13325,10 @@ end
 		
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar ("nameplateMinScale")) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar ("nameplateMinScale")) end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateMinScale", value)
+					PlaterTemucraft.SetCVar ("nameplateMinScale", value)
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
 				end
@@ -13345,10 +13345,10 @@ end
 		
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar ("nameplateLargerScale")) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar ("nameplateLargerScale")) end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateLargerScale", value)
+					PlaterTemucraft.SetCVar ("nameplateLargerScale", value)
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
 				end
@@ -13365,7 +13365,7 @@ end
 
 		{
 			type = "select",
-			get = function() return tonumber (GetCVar ("nameplateOtherAtBase")) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar ("nameplateOtherAtBase")) end,
 			values = function() return nameplate_anchor_options end,
 			name = "Anchor Point" .. CVarIcon,
 			desc = "Where the nameplate is anchored to.\n\n|cFFFFFFFFDefault: Head|r" .. CVarDesc,
@@ -13373,13 +13373,13 @@ end
 		},
 		{
 			type = "toggle",
-			get = function() return GetCVarBool ("nameplateShowDebuffsOnFriendly") end,
+			get = function() return PlaterTemucraft.GetCVarBool ("nameplateShowDebuffsOnFriendly") end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateShowDebuffsOnFriendly", value and "1" or "0")
+					PlaterTemucraft.SetCVar ("nameplateShowDebuffsOnFriendly", value and "1" or "0")
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVarBool ("nameplateShowDebuffsOnFriendly"))
+					self:SetValue (PlaterTemucraft.GetCVarBool ("nameplateShowDebuffsOnFriendly"))
 				end
 			end,
 			name = "Show Debuffs on Blizzard Health Bars" .. CVarIcon,
@@ -13392,13 +13392,13 @@ end
 		
 		{
 			type = "toggle",
-			get = function() return GetCVar ("nameplateShowEnemyGuardians") == CVAR_ENABLED end,
+			get = function() return PlaterTemucraft.GetCVar ("nameplateShowEnemyGuardians") == CVAR_ENABLED end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateShowEnemyGuardians", math.abs (tonumber (GetCVar ("nameplateShowEnemyGuardians"))-1))
+					PlaterTemucraft.SetCVar ("nameplateShowEnemyGuardians", math.abs (tonumber (PlaterTemucraft.GetCVar ("nameplateShowEnemyGuardians"))-1))
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVar ("nameplateShowEnemyGuardians") == CVAR_ENABLED)
+					self:SetValue (PlaterTemucraft.GetCVar ("nameplateShowEnemyGuardians") == CVAR_ENABLED)
 				end
 			end,
 			name = "Show Enemy Guardians" .. CVarIcon,
@@ -13408,13 +13408,13 @@ end
 		
 		{
 			type = "toggle",
-			get = function() return GetCVar ("nameplateShowEnemyMinions") == CVAR_ENABLED end,
+			get = function() return PlaterTemucraft.GetCVar ("nameplateShowEnemyMinions") == CVAR_ENABLED end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateShowEnemyMinions", math.abs (tonumber (GetCVar ("nameplateShowEnemyMinions"))-1))
+					PlaterTemucraft.SetCVar ("nameplateShowEnemyMinions", math.abs (tonumber (PlaterTemucraft.GetCVar ("nameplateShowEnemyMinions"))-1))
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVar ("nameplateShowEnemyMinions") == CVAR_ENABLED)
+					self:SetValue (PlaterTemucraft.GetCVar ("nameplateShowEnemyMinions") == CVAR_ENABLED)
 				end
 			end,
 			name = "Show Enemy Minions" .. CVarIcon,
@@ -13424,13 +13424,13 @@ end
 		
 		{
 			type = "toggle",
-			get = function() return GetCVar ("nameplateShowEnemyMinus") == CVAR_ENABLED end,
+			get = function() return PlaterTemucraft.GetCVar ("nameplateShowEnemyMinus") == CVAR_ENABLED end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateShowEnemyMinus", math.abs (tonumber (GetCVar ("nameplateShowEnemyMinus"))-1))
+					PlaterTemucraft.SetCVar ("nameplateShowEnemyMinus", math.abs (tonumber (PlaterTemucraft.GetCVar ("nameplateShowEnemyMinus"))-1))
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVar ("nameplateShowEnemyMinus") == CVAR_ENABLED)
+					self:SetValue (PlaterTemucraft.GetCVar ("nameplateShowEnemyMinus") == CVAR_ENABLED)
 				end
 			end,
 			name = "Show Enemy Minor Units" .. CVarIcon,
@@ -13440,13 +13440,13 @@ end
 
 		{
 			type = "toggle",
-			get = function() return GetCVar ("nameplateShowEnemyPets") == CVAR_ENABLED end,
+			get = function() return PlaterTemucraft.GetCVar ("nameplateShowEnemyPets") == CVAR_ENABLED end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateShowEnemyPets", math.abs (tonumber (GetCVar ("nameplateShowEnemyPets"))-1))
+					PlaterTemucraft.SetCVar ("nameplateShowEnemyPets", math.abs (tonumber (PlaterTemucraft.GetCVar ("nameplateShowEnemyPets"))-1))
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVar ("nameplateShowEnemyPets") == CVAR_ENABLED)
+					self:SetValue (PlaterTemucraft.GetCVar ("nameplateShowEnemyPets") == CVAR_ENABLED)
 				end
 			end,
 			name = "Show Enemy Pets" .. CVarIcon,
@@ -13456,13 +13456,13 @@ end
 
 		{
 			type = "toggle",
-			get = function() return GetCVar ("nameplateShowEnemyTotems") == CVAR_ENABLED end,
+			get = function() return PlaterTemucraft.GetCVar ("nameplateShowEnemyTotems") == CVAR_ENABLED end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateShowEnemyTotems", math.abs (tonumber (GetCVar ("nameplateShowEnemyTotems"))-1))
+					PlaterTemucraft.SetCVar ("nameplateShowEnemyTotems", math.abs (tonumber (PlaterTemucraft.GetCVar ("nameplateShowEnemyTotems"))-1))
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVar ("nameplateShowEnemyTotems") == CVAR_ENABLED)
+					self:SetValue (PlaterTemucraft.GetCVar ("nameplateShowEnemyTotems") == CVAR_ENABLED)
 				end
 			end,
 			name = "Show Enemy Totems" .. CVarIcon,
@@ -13474,13 +13474,13 @@ end
 		
 		{
 			type = "toggle",
-			get = function() return GetCVar ("nameplateShowFriendlyNPCs") == CVAR_ENABLED end,
+			get = function() return PlaterTemucraft.GetCVar ("nameplateShowFriendlyNPCs") == CVAR_ENABLED end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateShowFriendlyNPCs", math.abs (tonumber (GetCVar ("nameplateShowFriendlyNPCs"))-1))
+					PlaterTemucraft.SetCVar ("nameplateShowFriendlyNPCs", math.abs (tonumber (PlaterTemucraft.GetCVar ("nameplateShowFriendlyNPCs"))-1))
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVar ("nameplateShowFriendlyNPCs") == CVAR_ENABLED)
+					self:SetValue (PlaterTemucraft.GetCVar ("nameplateShowFriendlyNPCs") == CVAR_ENABLED)
 				end
 			end,
 			name = "Show Friendly Npcs" .. CVarIcon,
@@ -13490,13 +13490,13 @@ end
 		
 		{
 			type = "toggle",
-			get = function() return GetCVar ("nameplateShowFriendlyGuardians") == CVAR_ENABLED end,
+			get = function() return PlaterTemucraft.GetCVar ("nameplateShowFriendlyGuardians") == CVAR_ENABLED end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateShowFriendlyGuardians", math.abs (tonumber (GetCVar ("nameplateShowFriendlyGuardians"))-1))
+					PlaterTemucraft.SetCVar ("nameplateShowFriendlyGuardians", math.abs (tonumber (PlaterTemucraft.GetCVar ("nameplateShowFriendlyGuardians"))-1))
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVar ("nameplateShowFriendlyGuardians") == CVAR_ENABLED)
+					self:SetValue (PlaterTemucraft.GetCVar ("nameplateShowFriendlyGuardians") == CVAR_ENABLED)
 				end
 			end,
 			name = "Show Friendly Guardians" .. CVarIcon,
@@ -13506,13 +13506,13 @@ end
 
 		{
 			type = "toggle",
-			get = function() return GetCVar ("nameplateShowFriendlyMinions") == CVAR_ENABLED end,
+			get = function() return PlaterTemucraft.GetCVar ("nameplateShowFriendlyMinions") == CVAR_ENABLED end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateShowFriendlyMinions", math.abs (tonumber (GetCVar ("nameplateShowFriendlyMinions"))-1))
+					PlaterTemucraft.SetCVar ("nameplateShowFriendlyMinions", math.abs (tonumber (PlaterTemucraft.GetCVar ("nameplateShowFriendlyMinions"))-1))
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVar ("nameplateShowFriendlyMinions") == CVAR_ENABLED)
+					self:SetValue (PlaterTemucraft.GetCVar ("nameplateShowFriendlyMinions") == CVAR_ENABLED)
 				end
 			end,
 			name = "Show Friendly Minions" .. CVarIcon,
@@ -13522,13 +13522,13 @@ end
 
 		{
 			type = "toggle",
-			get = function() return GetCVar ("nameplateShowFriendlyPets") == CVAR_ENABLED end,
+			get = function() return PlaterTemucraft.GetCVar ("nameplateShowFriendlyPets") == CVAR_ENABLED end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateShowFriendlyPets", math.abs (tonumber (GetCVar ("nameplateShowFriendlyPets"))-1))
+					PlaterTemucraft.SetCVar ("nameplateShowFriendlyPets", math.abs (tonumber (PlaterTemucraft.GetCVar ("nameplateShowFriendlyPets"))-1))
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVar ("nameplateShowFriendlyPets") == CVAR_ENABLED)
+					self:SetValue (PlaterTemucraft.GetCVar ("nameplateShowFriendlyPets") == CVAR_ENABLED)
 				end
 			end,
 			name = "Show Friendly Pets" .. CVarIcon,
@@ -13538,13 +13538,13 @@ end
 
 		{
 			type = "toggle",
-			get = function() return GetCVar ("nameplateShowFriendlyTotems") == CVAR_ENABLED end,
+			get = function() return PlaterTemucraft.GetCVar ("nameplateShowFriendlyTotems") == CVAR_ENABLED end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar ("nameplateShowFriendlyTotems", math.abs (tonumber (GetCVar ("nameplateShowFriendlyTotems"))-1))
+					PlaterTemucraft.SetCVar ("nameplateShowFriendlyTotems", math.abs (tonumber (PlaterTemucraft.GetCVar ("nameplateShowFriendlyTotems"))-1))
 				else
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVar ("nameplateShowFriendlyTotems") == CVAR_ENABLED)
+					self:SetValue (PlaterTemucraft.GetCVar ("nameplateShowFriendlyTotems") == CVAR_ENABLED)
 				end
 			end,
 			name = "Show Friendly Totems" .. CVarIcon,
@@ -13809,18 +13809,18 @@ end
 		{type = "label", get = function() return "Personal Bar Custom Position:" end, text_template = DF:GetTemplate ("font", "ORANGE_FONT_TEMPLATE"), hidden = IS_WOW_PROJECT_NOT_MAINLINE},
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar ("nameplateSelfTopInset")*100) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar ("nameplateSelfTopInset")*100) end,
 			set = function (self, fixedparam, value) 
 				--Plater.db.profile.plate_config.player.y_position_offset = value
 
 				if (InCombatLockdown()) then
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (tonumber (GetCVar ("nameplateSelfTopInset")*100))
+					self:SetValue (tonumber (PlaterTemucraft.GetCVar ("nameplateSelfTopInset")*100))
 					return
 				end
 
-				--SetCVar ("nameplateSelfBottomInset", value / 100)
-				SetCVar ("nameplateSelfTopInset", abs (value - 99) / 100)
+				--PlaterTemucraft.SetCVar ("nameplateSelfBottomInset", value / 100)
+				PlaterTemucraft.SetCVar ("nameplateSelfTopInset", abs (value - 99) / 100)
 				
 				if (not Plater.PersonalAdjustLocationTop) then
 					Plater.PersonalAdjustLocationTop = CreateFrame ("frame", "PlaterPersonalBarLocation", UIParent, BackdropTemplateMixin and "BackdropTemplate")
@@ -13876,18 +13876,18 @@ end
 		
 		{
 			type = "range",
-			get = function() return tonumber (GetCVar ("nameplateSelfBottomInset")*100) end,
+			get = function() return tonumber (PlaterTemucraft.GetCVar ("nameplateSelfBottomInset")*100) end,
 			set = function (self, fixedparam, value) 
 				--Plater.db.profile.plate_config.player.y_position_offset = value
 
 				if (InCombatLockdown()) then
 					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (tonumber (GetCVar ("nameplateSelfBottomInset")*100))
+					self:SetValue (tonumber (PlaterTemucraft.GetCVar ("nameplateSelfBottomInset")*100))
 					return
 				end
 
-				SetCVar ("nameplateSelfBottomInset", value / 100)
-				--SetCVar ("nameplateSelfTopInset", value / 100)
+				PlaterTemucraft.SetCVar ("nameplateSelfBottomInset", value / 100)
+				--PlaterTemucraft.SetCVar ("nameplateSelfTopInset", value / 100)
 				
 				if (not Plater.PersonalAdjustLocationBottom) then
 					Plater.PersonalAdjustLocationBottom = CreateFrame ("frame", "PlaterPersonalBarLocation", UIParent, BackdropTemplateMixin and "BackdropTemplate")

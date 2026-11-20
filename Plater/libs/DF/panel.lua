@@ -18,8 +18,9 @@ local IS_WOW_PROJECT_MAINLINE = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 local IS_WOW_PROJECT_NOT_MAINLINE = WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE
 local IS_WOW_PROJECT_CLASSIC_ERA = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 
-local UnitCastingInfo = UnitCastingInfo
-local UnitChannelInfo = UnitChannelInfo
+--Temucraft: cast info with the newer return values (the 3.3.5 ones have the rank second and no spell id)
+local UnitCastingInfo = TemucraftCompat and TemucraftCompat.Modern and TemucraftCompat.Modern.UnitCastingInfo or UnitCastingInfo
+local UnitChannelInfo = TemucraftCompat and TemucraftCompat.Modern and TemucraftCompat.Modern.UnitChannelInfo or UnitChannelInfo
 
 if IS_WOW_PROJECT_CLASSIC_ERA then
     UnitCastingInfo = CastingInfo

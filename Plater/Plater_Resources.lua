@@ -3,8 +3,9 @@ local Plater = _G.Plater
 local GameCooltip = GameCooltip2
 local DF = DetailsFramework
 local _
-local UnitPower = _G.UnitPower
-local UnitPowerMax = _G.UnitPowerMax
+--Temucraft: combo points are GetComboPoints on 3.3.5 (no combo point power type)
+local UnitPower = PlaterTemucraft.UnitPower
+local UnitPowerMax = PlaterTemucraft.UnitPowerMax
 local abs = _G.abs
 
 local IS_WOW_PROJECT_MAINLINE = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
