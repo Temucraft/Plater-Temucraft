@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 local MAJOR_VERSION = "LibCustomGlow-1.0"
 local MINOR_VERSION = 14
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end

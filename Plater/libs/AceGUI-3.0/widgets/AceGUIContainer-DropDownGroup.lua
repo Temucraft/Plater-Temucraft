@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --[[-----------------------------------------------------------------------------
 DropdownGroup Container
 Container controlled by a dropdown on the top.

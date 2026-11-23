@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 local MAJOR_VERSION = "LibTranslit-1.0"
 local MINOR_VERSION = 3
 if not LibStub then

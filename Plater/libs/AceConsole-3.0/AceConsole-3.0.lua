@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --- **AceConsole-3.0** provides registration facilities for slash commands.
 -- You can register slash commands to your custom functions and use the `GetArgs` function to parse them
 -- to your addons individual needs.

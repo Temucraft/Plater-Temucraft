@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 
 
 local Plater = _G.Plater
@@ -20,17 +21,17 @@ local CreateFrame = _G.CreateFrame
 local unpack = _G.unpack
 local CooldownFrame_Set = _G.CooldownFrame_Set
 local GetTime = _G.GetTime
-local UnitClass = _G.UnitClass
-local UnitPlayerControlled = _G.UnitPlayerControlled
-local UnitName = _G.UnitName
+local UnitClass = UnitClass
+local UnitPlayerControlled = UnitPlayerControlled
+local UnitName = UnitName
 local wipe = _G.wipe
-local UnitIsUnit = _G.UnitIsUnit
-local UnitGUID = _G.UnitGUID
+local UnitIsUnit = UnitIsUnit
+local UnitGUID = UnitGUID
 local GetSpellInfo = _G.GetSpellInfo
 local floor = _G.floor
-local UnitAuraSlots = _G.UnitAuraSlots
-local UnitAuraBySlot = _G.UnitAuraBySlot
-local UnitAura = PlaterTemucraft.Modern.UnitAura or _G.UnitAura --Temucraft: UnitAura with the newer return values
+local UnitAuraSlots = UnitAuraSlots
+local UnitAuraBySlot = UnitAuraBySlot
+local UnitAura = PlaterTemucraft.Modern.UnitAura or UnitAura --Temucraft: UnitAura with the newer return values
 local GetAuraDataBySlot = _G.C_UnitAuras and _G.C_UnitAuras.GetAuraDataBySlot
 local BackdropTemplateMixin = _G.BackdropTemplateMixin
 local BUFF_MAX_DISPLAY = _G.BUFF_MAX_DISPLAY

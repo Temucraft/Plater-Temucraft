@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --[[-----------------------------------------------------------------------------
 InlineGroup Container
 Simple container widget that creates a visible "box" with an optional title.

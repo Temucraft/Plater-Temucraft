@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --todo: need to send a callback when setting a new language, this will be used by the volatile menu to refresh the menu
 
 --[=[

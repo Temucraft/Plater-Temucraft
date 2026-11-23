@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 
 local DF = _G["DetailsFramework"]
 if (not DF or not DetailsFrameworkCanLoad) then

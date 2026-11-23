@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --- **AceComm-3.0** allows you to send messages of unlimited length over the addon comm channels.
 -- It'll automatically split the messages into multiple parts and rebuild them on the receiving end.\\
 -- **ChatThrottleLib** is of course being used to avoid being disconnected by the server.

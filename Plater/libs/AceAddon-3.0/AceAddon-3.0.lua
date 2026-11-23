@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --- **AceAddon-3.0** provides a template for creating addon objects.
 -- It'll provide you with a set of callback functions that allow you to simplify the loading
 -- process of your addon.\\

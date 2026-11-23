@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --[[-----------------------------------------------------------------------------
 Keybinding Widget
 Set Keybindings in the Config UI.

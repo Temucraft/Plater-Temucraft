@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --- AceConfigRegistry-3.0 handles central registration of options tables in use by addons and modules.\\
 -- Options tables can be registered as raw tables, OR as function refs that return a table.\\
 -- Such functions receive three arguments: "uiType", "uiName", "appName". \\

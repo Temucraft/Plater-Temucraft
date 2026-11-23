@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --- **AceSerializer-3.0** can serialize any variable (except functions or userdata) into a string format,
 -- that can be send over the addon comm channel. AceSerializer was designed to keep all data intact, especially
 -- very large numbers or floating point numbers, and table structures. The only caveat currently is, that multiple

@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --- **AceGUI-3.0** provides access to numerous widgets which can be used to create GUIs.
 -- AceGUI is used by AceConfigDialog to create the option GUIs, but you can use it by itself
 -- to create any custom GUI. There are more extensive examples in the test suite in the Ace3

@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --- AceConfigCmd-3.0 handles access to an options table through the "command line" interface via the ChatFrames.
 -- @class file
 -- @name AceConfigCmd-3.0

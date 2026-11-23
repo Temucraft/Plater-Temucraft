@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --- **AceTimer-3.0** provides a central facility for registering timers.
 -- AceTimer supports one-shot timers and repeating timers. All timers are stored in an efficient
 -- data structure that allows easy dispatching and fast rescheduling. Timers can be registered

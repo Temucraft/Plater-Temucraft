@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --Plater main software file
 
 --Calls with : are functions imported from the framework
@@ -11130,6 +11131,7 @@ end
 				elseif shadowValuesTable [key] then -- if true, don't return value
 					return nil
 				else
+					if not tableKey and TemucraftCompat and TemucraftCompat.UnitEnv and rawget(TemucraftCompat.UnitEnv, key) then return rawget(TemucraftCompat.UnitEnv, key) end --Temucraft: nameplate unit tokens
 					return rawget(tableKey and _G[tableKey] or _G, key)
 				end
 			end,

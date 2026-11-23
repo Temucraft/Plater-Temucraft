@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --[[ $Id: CallbackHandler-1.0.lua 1284 2022-09-25 09:15:30Z nevcairiel $ ]]
 local MAJOR, MINOR = "CallbackHandler-1.0", 7
 local CallbackHandler = LibStub:NewLibrary(MAJOR, MINOR)

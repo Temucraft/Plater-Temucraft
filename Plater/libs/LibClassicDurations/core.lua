@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --[================[
 LibClassicDurations
 Author: d87
@@ -8,7 +9,7 @@ Usage example 1:
 -----------------
 
     -- Using UnitAura wrapper
-    local UnitAura = _G.UnitAura
+    local UnitAura = UnitAura
 
     local LibClassicDurations = LibStub("LibClassicDurations", true)
     if LibClassicDurations then

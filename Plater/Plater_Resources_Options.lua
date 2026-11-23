@@ -1,11 +1,12 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 local addonName, platerInternal = ...
 
 local Plater = _G.Plater
 local GameCooltip = GameCooltip2
 local DF = DetailsFramework
 local _
-local UnitPower = _G.UnitPower
-local UnitPowerMax = _G.UnitPowerMax
+local UnitPower = UnitPower
+local UnitPowerMax = UnitPowerMax
 local abs = _G.abs
 
 local hookbox_label_y = -130

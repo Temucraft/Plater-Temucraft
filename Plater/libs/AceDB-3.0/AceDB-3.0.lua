@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --- **AceDB-3.0** manages the SavedVariables of your addon.
 -- It offers profile management, smart defaults and namespaces for modules.\\
 -- Data can be saved in different data-types, depending on its intended usage.

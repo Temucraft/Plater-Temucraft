@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 -- Plater (Temucraft): helpers the port uses to run on the 3.3.5 client, on top of !TemucraftCompat.
 --
 -- The 3.3.5 nameplate is a plain frame with regions (border, name, level, icons) and two status bars (health, cast).

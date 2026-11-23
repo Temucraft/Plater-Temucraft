@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --- AceDBOptions-3.0 provides a universal AceConfig options screen for managing AceDB-3.0 profiles.
 -- @class file
 -- @name AceDBOptions-3.0

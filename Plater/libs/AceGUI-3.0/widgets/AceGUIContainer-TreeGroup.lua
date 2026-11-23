@@ -1,3 +1,4 @@
+if TemucraftCompat and TemucraftCompat.UnitEnv then setfenv(1, TemucraftCompat.UnitEnv) end -- Temucraft: nameplate unit tokens
 --[[-----------------------------------------------------------------------------
 TreeGroup Container
 Container that uses a tree control to switch between groups.
