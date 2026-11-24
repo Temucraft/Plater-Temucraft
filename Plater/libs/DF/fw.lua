@@ -4037,7 +4037,9 @@ function DF:CoreDispatch (context, func, ...)
 		error (errortext)
 	end
 	
-	local okay, result1, result2, result3, result4 = xpcall(func, geterrorhandler(), ...)
+	-- the 3.3.5 client's xpcall gives the function no arguments (Lua 5.1), so they go in a closure
+	local n, args = select("#", ...), { ... }
+	local okay, result1, result2, result3, result4 = xpcall(function() return func(unpack(args, 1, n)) end, geterrorhandler())
 
 	--if (not okay) then --when using pcall
 		--local stack = debugstack(2)

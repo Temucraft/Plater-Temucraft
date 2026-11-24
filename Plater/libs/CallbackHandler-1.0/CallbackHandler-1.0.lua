@@ -22,7 +22,9 @@ local function Dispatch(handlers, ...)
 	local index, method = next(handlers)
 	if not method then return end
 	repeat
-		xpcall(method, errorhandler, ...)
+		-- the 3.3.5 client's xpcall gives the function no arguments (Lua 5.1), so they go in a closure
+		local n, args = select("#", ...), { ... }
+		xpcall(function() return method(unpack(args, 1, n)) end, errorhandler)
 		index, method = next(handlers, index)
 	until not method
 end

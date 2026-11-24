@@ -711,6 +711,19 @@ DF:Mixin(DFSliderMetaFunctions, DF.FrameMixin)
 
 		table_insert (slider.MyObject.previous_value, 1, amt)
 		table_remove (slider.MyObject.previous_value, 4)
+
+		-- Temucraft: show the new number first, so it follows the slider even when a hook below fails
+		do
+			local shown = amt
+			if (shown < 10 and shown >= 1) then
+				shown = "0"..shown
+			end
+			if (slider.MyObject.useDecimals) then
+				slider.amt:SetText (string.format ("%.2f", shown))
+			else
+				slider.amt:SetText (math.floor (shown))
+			end
+		end
 		
 		local capsule = slider.MyObject
 

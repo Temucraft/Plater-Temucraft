@@ -64,7 +64,9 @@ local function safecall(func, ...)
 	-- this safecall is used for optional functions like OnInitialize OnEnable etc. When they are not
 	-- present execution should continue without hinderance
 	if type(func) == "function" then
-		return xpcall(func, errorhandler, ...)
+		-- the 3.3.5 client's xpcall gives the function no arguments (Lua 5.1), so they go in a closure
+		local n, args = select("#", ...), { ... }
+		return xpcall(function() return func(unpack(args, 1, n)) end, errorhandler)
 	end
 end
 

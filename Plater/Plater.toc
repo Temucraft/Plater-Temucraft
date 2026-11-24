@@ -2,7 +2,7 @@
 ## Title: Plater (Temucraft)
 ## Notes: Nameplate addon designed for advanced users. Port of Plater to the 3.3.5 client for Temucraft.
 ## Author: Terciob and the Plater team; 3.3.5 port by Temucraft
-## Version: 536.1-Temucraft-1.0.0
+## Version: 536.1-Temucraft-1.0.1
 ## X-Upstream: Tercioo/Plater-Nameplates Plater-v536.1
 ## Dependencies: !TemucraftCompat
 ## SavedVariables: PlaterDB

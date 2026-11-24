@@ -667,7 +667,7 @@ function DF:CreateCoolTip()
 			if (gameCooltip.PopupFrameTable[self.index]) then
 				local onEnter, onLeave, param1, param2 = unpack(gameCooltip.PopupFrameTable[self.index])
 				if (onEnter) then
-					xpcall(onEnter, geterrorhandler(), frame1, param1, param2)
+					xpcall(function() return onEnter(frame1, param1, param2) end, geterrorhandler()) -- 3.3.5 xpcall passes no arguments
 				end
 
 			elseif (gameCooltip.IndexesSub[self.index] and gameCooltip.IndexesSub[self.index] > 0) then
@@ -714,7 +714,7 @@ function DF:CreateCoolTip()
 			if (gameCooltip.PopupFrameTable[self.index]) then
 				local onEnter, onLeave, param1, param2 = unpack(gameCooltip.PopupFrameTable[self.index])
 				if (onLeave) then
-					xpcall(onLeave, geterrorhandler(), frame1, param1, param2)
+					xpcall(function() return onLeave(frame1, param1, param2) end, geterrorhandler()) -- 3.3.5 xpcall passes no arguments
 				end
 			end
 
